@@ -11,7 +11,7 @@ def receiver():
     event = request.headers.get("X-GitHub-Event")
 
     doc = {
-        "timestamp": datetime.utcnow().isoformat() + "Z"  
+        "timestamp": datetime.utcnow()
     }
 
     if event == "push":
@@ -55,6 +55,7 @@ def receiver():
 
     mongo.db.events.insert_one(doc)
     return jsonify({"status": "stored"}), 200
+    
 @webhook.route('/events', methods=["GET"])
 def get_events():
     docs = list(mongo.db.events.find().sort("timestamp", -1).limit(20))
