@@ -31,3 +31,9 @@ The backend stores events and the frontend displays them in a human-readable act
 - HTML + CSS + JavaScript
 
 ---
+
+## 🌐 Live UI
+
+You can view the live repository activity here:
+
+👉 https://webhook-app-ncsq.onrender.com/ui
