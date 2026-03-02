@@ -11,12 +11,12 @@ def receiver():
     event = request.headers.get("X-GitHub-Event")
 
     doc = {
-        "request_id": str(uuid.uuid4()),
-        "timestamp": datetime.utcnow()
+        "timestamp": datetime.utcnow().isoformat() + "Z"  
     }
 
     if event == "push":
         doc.update({
+            "request_id": payload["head_commit"]["id"], 
             "author": payload["pusher"]["name"],
             "action": "push",
             "from_branch": None,
@@ -43,6 +43,7 @@ def receiver():
             return jsonify({"status": "ignored"}), 200
 
         doc.update({
+            "request_id": str(pr["id"]),
             "author": pr["user"]["login"],
             "action": action,
             "from_branch": pr["head"]["ref"],
@@ -54,7 +55,6 @@ def receiver():
 
     mongo.db.events.insert_one(doc)
     return jsonify({"status": "stored"}), 200
-
 @webhook.route('/events', methods=["GET"])
 def get_events():
     docs = list(mongo.db.events.find().sort("timestamp", -1).limit(20))

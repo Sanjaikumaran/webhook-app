@@ -7,7 +7,6 @@ from .webhook.routes import webhook
 
 def create_app():
     load_dotenv()
-    print("ii")
 
     app = Flask(__name__, static_folder="../ui", static_url_path="/ui")
 
